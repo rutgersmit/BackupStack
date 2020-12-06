@@ -1,0 +1,56 @@
+version: '3.5'
+
+services:
+  mariadb:
+    container_name: mariadb
+    image: mariadb
+    restart: unless-stopped
+#    ports:
+#      - 3306:3306
+    networks:
+      - nextcloud-net
+    volumes:
+      - ${DATAROOT}/mariadb:/var/lib/mysql
+    environment:
+#      - MYSQL_RANDOM_ROOT_PASSWORD=true
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloudusr
+      - MYSQL_PASSWORD=${MYSQLPASSWORD}
+
+  adminer:
+    container_name: adminer
+    image: adminer
+    restart: unless-stopped
+    depends_on: mariadb
+    ports:
+      - 8092:8080
+    networks:
+      - nextcloud-net
+    environment:
+      - ADMINER_DEFAULT_SERVER=mariadb
+      - ADMINER_DESIGN=nette
+
+  nextcloud:
+    container_name: nextcloud
+    image: nextcloud
+    restart: unless-stopped
+    depends_on: mariadb
+    ports:
+      - 8091:80
+    networks:
+      - nextcloud-net
+    volumes:
+      - /var/docker/nextcloud/www/html:/var/www/html
+      - /var/docker/nextcloud/www/html/custom_apps:/var/www/html/custom_apps
+      - /var/docker/nextcloud/www/html/config:/var/www/html/config
+      - ${DATAROOT}/nextcloud:/var/www/html/data
+    environment:
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloudusr
+      - MYSQL_PASSWORD=${MYSQLPASSWORD}
+      - MYSQL_HOST=mariadb
+
+networks:
+  nextcloud-net:
+#    name: nextcloud-net
+    driver: bridge
