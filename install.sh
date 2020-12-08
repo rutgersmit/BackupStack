@@ -22,7 +22,7 @@ else
     exit
 fi
 
-echo "🔍 Checking if docker is installed"
+echo "🔍  Checking if docker is installed"
 if ! command -v docker &> /dev/null
 then
     echo "❌  docker could not be found, installing it"
@@ -61,7 +61,7 @@ if [ ! "$(docker ps -q -f name=portainer)" ]; then
 fi
 
 # echo variables into .env file which is read by docker compose
-echo PASSWORD = `date +%s | sha256sum | base64 | head -c 32`
+PASSWORD = `date +%s | sha256sum | base64 | head -c 32`
 echo "MYSQLPASSWORD=$PASSWORD" > .env  &> /dev/null
 echo "DATAROOT=$DIR" >> .env &> /dev/null
 
