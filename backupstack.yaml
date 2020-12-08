@@ -21,7 +21,8 @@ services:
     container_name: adminer
     image: adminer
     restart: unless-stopped
-    depends_on: mariadb
+    depends_on:
+      - mariadb
     ports:
       - 8092:8080
     networks:
@@ -34,7 +35,8 @@ services:
     container_name: nextcloud
     image: nextcloud
     restart: unless-stopped
-    depends_on: mariadb
+    depends_on: 
+      - mariadb
     ports:
       - 8091:80
     networks:

@@ -67,6 +67,6 @@ echo "DATAROOT=$DIR" >> .env &> /dev/null
 
 # bring up the container stack
 echo "🚀️  Starting the docker stack"
-docker-compose -p backupstack -f backupstack.yaml up --detach
+docker-compose -p backupstack -f backupstack.yaml up -d
 
 echo "🧘  Done, everything should be running"
