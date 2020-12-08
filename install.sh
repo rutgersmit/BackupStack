@@ -34,7 +34,7 @@ else
 fi
 
 echo "🔍  Checking if docker compose is installed"
-if ! command -v docker &> /dev/null
+if ! command -v docker-compose &> /dev/null
 then
     echo "❌  docker compose could not be found, installing it"
     apt update
@@ -60,11 +60,10 @@ if [ ! "$(docker ps -q -f name=portainer)" ]; then
   echo "✔  Portainer succesfully installed"
 fi
 
-
-# echo variables into /env file which is read by docker compose
+# echo variables into .env file which is read by docker compose
 echo PASSWORD = `date +%s | sha256sum | base64 | head -c 32`
-echo "MYSQLPASSWORD=$PASSWORD" > .env
-echo "DATAROOT=$DIR" >> .env
+echo "MYSQLPASSWORD=$PASSWORD" > .env  &> /dev/null
+echo "DATAROOT=$DIR" >> .env &> /dev/null
 
 # bring up the container stack
 echo "🚀️  Starting the docker stack"
