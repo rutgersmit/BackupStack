@@ -61,9 +61,9 @@ if [ ! "$(docker ps -q -f name=portainer)" ]; then
 fi
 
 # echo variables into .env file which is read by docker compose
-PASSWORD = `date +%s | sha256sum | base64 | head -c 32`
-echo "MYSQLPASSWORD=$PASSWORD" > .env  &> /dev/null
-echo "DATAROOT=$DIR" >> .env &> /dev/null
+PASSWORD=`date +%s | sha256sum | base64 | head -c 32`
+echo "MYSQLPASSWORD=$PASSWORD" > .env
+echo "DATAROOT=$DIR" >> .env
 
 # bring up the container stack
 echo "🚀️  Starting the docker stack"
