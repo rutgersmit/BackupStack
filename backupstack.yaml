@@ -1,6 +1,17 @@
 version: '3.5'
 
 services:
+  portainer:
+    image: portainer/portainer
+    command: -H unix:///var/run/docker.sock
+    restart: always
+    ports:
+      - 9000:9000
+      - 8000:8000
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/docker/portainer:/data
+
   mariadb:
     container_name: mariadb
     image: mariadb
@@ -12,7 +23,7 @@ services:
     volumes:
       - ${DATAROOT}/mariadb:/var/lib/mysql
     environment:
-#      - MYSQL_RANDOM_ROOT_PASSWORD=true
+      - MYSQL_RANDOM_ROOT_PASSWORD=true
       - MYSQL_DATABASE=nextcloud
       - MYSQL_USER=nextcloudusr
       - MYSQL_PASSWORD=${MYSQLPASSWORD}
