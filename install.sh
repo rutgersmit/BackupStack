@@ -27,7 +27,7 @@ if ! command -v docker &> /dev/null
 then
     echo "❌  docker could not be found, installing it"
     apt update
-    apt install docker.io -y
+    apt install docker-ce -y
 	echo "✔  docker succesfully installed"
 else
     echo "✔  docker already installed"
