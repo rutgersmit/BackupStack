@@ -3,6 +3,7 @@ version: '3.5'
 services:
   portainer:
     image: portainer/portainer
+    container_name: portainer
     command: -H unix:///var/run/docker.sock
     restart: always
     ports:
@@ -13,13 +14,13 @@ services:
       - /var/docker/portainer:/data
 
   mariadb:
-    container_name: mariadb
     image: mariadb
+    container_name: mariadb
     restart: unless-stopped
 #    ports:
 #      - 3306:3306
     networks:
-      - nextcloud-net
+      - backupnet
     volumes:
       - ${DATAROOT}/mariadb:/var/lib/mysql
     environment:
@@ -29,29 +30,29 @@ services:
       - MYSQL_PASSWORD=${MYSQLPASSWORD}
 
   adminer:
-    container_name: adminer
     image: adminer
+    container_name: adminer
     restart: unless-stopped
     depends_on:
       - mariadb
     ports:
       - 8092:8080
     networks:
-      - nextcloud-net
+      - backupnet
     environment:
       - ADMINER_DEFAULT_SERVER=mariadb
       - ADMINER_DESIGN=nette
 
   nextcloud:
-    container_name: nextcloud
     image: nextcloud
+    container_name: nextcloud
     restart: unless-stopped
     depends_on: 
       - mariadb
     ports:
       - 8091:80
     networks:
-      - nextcloud-net
+      - backupnet
     volumes:
       - /var/docker/nextcloud/www/html:/var/www/html
       - /var/docker/nextcloud/www/html/custom_apps:/var/www/html/custom_apps
@@ -64,6 +65,6 @@ services:
       - MYSQL_HOST=mariadb
 
 networks:
-  nextcloud-net:
-#    name: nextcloud-net
+  backupnet:
+#    name: backupnet
     driver: bridge

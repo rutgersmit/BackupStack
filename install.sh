@@ -50,17 +50,6 @@ mkdir -p /var/docker/nextcloud
 mkdir -p $DIR/mariadb
 chown -R www-data /var/docker/nextcloud
 
-
-#echo "🔍  Checking if Portainer is installed"
-#if [ ! "$(docker ps -q -f name=portainer)" ]; then
-#  echo "❌  Portainer is not installed, installing it right now. Why? Because I'm lazy"
-#  mkdir -p /var/docker/portainer
-#  
-#  # install portainer because...
-#  docker run -d -p 8000:8000 -p 9000:9000 --name=portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v /var/docker/portainer:/data portainer/portainer-ce
-#  echo "✔  Portainer succesfully installed"
-#fi
-
 # echo variables into .env file which is read by docker compose
 PASSWORD=`date +%s | sha256sum | base64 | head -c 32`
 echo "MYSQLPASSWORD=$PASSWORD" > .env
