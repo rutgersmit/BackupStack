@@ -47,7 +47,7 @@ then
     apt install docker-compose -y
 	echo "✔  docker compose succesfully installed"
 else
-    echo "✔  docker compose already install"
+    echo "✔  docker compose already installed"
 fi
 
 # create some dirs for persistent storage for Docker containers
