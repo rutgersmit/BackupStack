@@ -66,3 +66,9 @@ echo "🚀️  Starting the docker stack"
 docker-compose -p backupstack -f backupstack.yaml up -d
 
 echo "🧘  Done, everything should be running"
+
+ip="$(ifconfig | grep -A 1 'eth0' | tail -1 | cut -d ':' -f 2 | cut -d ' ' -f 1)"
+echo "🌍  Portainer runs on http://$ip:9000"
+echo "🌍  Nextcloud runs on http://$ip:8017"
+echo "🌍  Adminer runs on http://$ip:8092"
+echo "🌍  Wireguard listens on port 51820"
