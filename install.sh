@@ -17,7 +17,7 @@ if [ "$mounted" != "${mounted#[Yy]}" ] ;then
       echo "❌  Could not find the mounted disk on $DIR, please check the mount and try again."
       exit
     fi
-    echo "✔  Disk mounted to the right location, let's continue!"
+    echo "✅  Disk mounted to the right location, let's continue!"
 else
     exit
 fi
@@ -28,15 +28,15 @@ then
     echo "❌  docker could not be found, installing it"
     apt update
 
-    if [  -n "$(uname -a | grep Ubuntu)" ]; then
+    if [ -n "$(uname -a | grep Ubuntu)" ]; then
       apt install docker.io -y
     else
       # wel... dunno, actually never been here
       apt install docker-ce -y
     fi
-	echo "✔  docker succesfully installed"
+	echo "✅  docker succesfully installed"
 else
-    echo "✔  docker already installed"
+    echo "✅  docker already installed"
 fi
 
 echo "🔍  Checking if docker compose is installed"
@@ -45,16 +45,20 @@ then
     echo "❌  docker compose could not be found, installing it"
     apt update
     apt install docker-compose -y
-	echo "✔  docker compose succesfully installed"
+	echo "✅  docker compose succesfully installed"
 else
-    echo "✔  docker compose already installed"
+    echo "✅  docker compose already installed"
 fi
 
 # create some dirs for persistent storage for Docker containers
-mkdir -p /var/docker/portainer
-mkdir -p /var/docker/nextcloud
+echo "📂  Doing some filesystem stuff"
+mkdir -p /data/docker/portainer
+mkdir -p /data/docker/nextcloud
 mkdir -p $DIR/mariadb
-chown -R www-data /var/docker/nextcloud
+mkdir -p $DIR/nextcloud
+chown -R www-data:www-data $DIR/nextcloud
+usermod -a -G www-data $USER
+
 
 # echo variables into .env file which is read by docker compose
 PASSWORD=`date +%s | sha256sum | base64 | head -c 32`
@@ -67,8 +71,8 @@ docker-compose -p backupstack -f backupstack.yaml up -d
 
 echo "🧘  Done, everything should be running"
 
-ip="$(hostname -I | cut -d " " -f 1)"
-echo "🌍  Portainer runs on http://$ip:9000"
-echo "🌍  Nextcloud runs on http://$ip:8017"
-echo "🌍  Adminer runs on http://$ip:8092"
+IP="$(hostname -I | cut -d " " -f 1)"
+echo "🌍  Portainer runs on http://$IP:9000"
+echo "🌍  Nextcloud runs on http://$IP:8017"
+echo "🌍  Adminer runs on http://$IP:8092"
 echo "🌍  Wireguard listens on port 51820"

@@ -11,7 +11,7 @@ services:
       - 8000:8000
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - /var/docker/portainer:/data
+      - /data/docker/portainer:/data
 
   mariadb:
     image: mariadb
@@ -54,9 +54,9 @@ services:
     networks:
       - backupnet
     volumes:
-      - /var/docker/nextcloud/www/html:/var/www/html
-      - /var/docker/nextcloud/www/html/custom_apps:/var/www/html/custom_apps
-      - /var/docker/nextcloud/www/html/config:/var/www/html/config
+      - /data/docker/nextcloud/www/html:/var/www/html
+      - /data/docker/nextcloud/www/html/custom_apps:/var/www/html/custom_apps
+      - /data/docker/nextcloud/www/html/config:/var/www/html/config
       - ${DATAROOT}/nextcloud:/var/www/html/data
     environment:
       - MYSQL_DATABASE=nextcloud
