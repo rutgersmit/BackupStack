@@ -56,9 +56,16 @@ mkdir -p /data/docker/portainer
 mkdir -p /data/docker/nextcloud
 mkdir -p $DIR/mariadb
 mkdir -p $DIR/nextcloud
-chown -R www-data:www-data $DIR/nextcloud
 usermod -a -G www-data $USER
 
+
+# add sftp user
+echo "🤓  Adding SFTP user"
+useradd sftpuser
+passwd sftpuser
+usermod -d $DIR/nextcloud/admin/files
+usermod -a -G www-data sftpuser
+chown -R sftpuser:www-data $DIR/nextcloud
 
 # echo variables into .env file which is read by docker compose
 PASSWORD=`date +%s | sha256sum | base64 | head -c 32`
