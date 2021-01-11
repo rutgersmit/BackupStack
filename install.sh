@@ -54,11 +54,10 @@ fi
 echo "📂  Doing some filesystem stuff"
 mkdir -p /data/docker/portainer
 mkdir -p /data/docker/nextcloud
-chown -R www-data:www-data /data/docker/nextcloud
 mkdir -p $DIR/mariadb
 mkdir -p $DIR/nextcloud
-usermod -a -G www-data $USER
 
+usermod -a -G www-data $USER
 
 # add sftp user
 echo "🤓  Adding SFTP user"
@@ -77,6 +76,9 @@ echo "DATAROOT=$DIR" >> .env
 # bring up the container stack
 echo "🚀️  Starting the docker stack"
 docker-compose -p backupstack -f backupstack.yaml up -d
+
+# chown after init of NextCloud
+chown -R www-data:www-data $DIR/nextcloud
 
 echo "🧘  Done, everything should be running"
 
