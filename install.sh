@@ -1,7 +1,6 @@
-#! /bin/bash
-
-if [ "$EUID" -ne 0 ]
-  then echo "🧙‍  Please run me as root"
+#!/bin/bash
+if [ $EUID -ne 0 ]; then
+  echo "🧙‍  Please run me as root"
   exit
 fi
 
@@ -50,10 +49,12 @@ else
     echo "✅  docker compose already installed"
 fi
 
+
 # create some dirs for persistent storage for Docker containers
 echo "📂  Doing some filesystem stuff"
 mkdir -p /data/docker/portainer
 mkdir -p /data/docker/nextcloud
+chown -R www-data:www-data /data/docker/nextcloud
 mkdir -p $DIR/mariadb
 mkdir -p $DIR/nextcloud
 usermod -a -G www-data $USER
@@ -63,14 +64,15 @@ usermod -a -G www-data $USER
 echo "🤓  Adding SFTP user"
 useradd sftpuser
 passwd sftpuser
-usermod -d $DIR/nextcloud/admin/files
+usermod -d $DIR/nextcloud/admin/files sftpuser
 usermod -a -G www-data sftpuser
-chown -R sftpuser:www-data $DIR/nextcloud
+
 
 # echo variables into .env file which is read by docker compose
 PASSWORD=`date +%s | sha256sum | base64 | head -c 32`
 echo "MYSQLPASSWORD=$PASSWORD" > .env
 echo "DATAROOT=$DIR" >> .env
+
 
 # bring up the container stack
 echo "🚀️  Starting the docker stack"
