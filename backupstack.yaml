@@ -13,56 +13,17 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - /data/docker/portainer:/data
 
-  mariadb:
-    image: mariadb
-    container_name: mariadb
-    restart: unless-stopped
-#    ports:
-#      - 3306:3306
-    networks:
-      - backupnet
-    volumes:
-      - ${DATAROOT}/mariadb:/var/lib/mysql
-    environment:
-      - MYSQL_RANDOM_ROOT_PASSWORD=true
-      - MYSQL_DATABASE=nextcloud
-      - MYSQL_USER=nextcloudusr
-      - MYSQL_PASSWORD=${MYSQLPASSWORD}
 
-  adminer:
-    image: adminer
-    container_name: adminer
-    restart: unless-stopped
-    depends_on:
-      - mariadb
-    ports:
-      - 8092:8080
-    networks:
-      - backupnet
-    environment:
-      - ADMINER_DEFAULT_SERVER=mariadb
-      - ADMINER_DESIGN=nette
+    filebrowser:
+      image: filebrowser/filebrowser
+      container_name: filebrowser  
+      volumes:
+            - '${DATAROOT}/data:/srv'
+            - '/data/docker/filebrowser/config/filebrowser.db:/database.db'
+            - '/data/docker/filebrowser/.filebrowser.json:/.filebrowser.json'
+      ports:
+            - '8017:80'
 
-  nextcloud:
-    image: nextcloud
-    container_name: nextcloud
-    restart: unless-stopped
-    depends_on: 
-      - mariadb
-    ports:
-      - 8017:80
-    networks:
-      - backupnet
-    volumes:
-      - /data/docker/nextcloud/www/html:/var/www/html
-      - /data/docker/nextcloud/www/html/custom_apps:/var/www/html/custom_apps
-      - /data/docker/nextcloud/www/html/config:/var/www/html/config
-      - ${DATAROOT}/nextcloud:/var/www/html/data
-    environment:
-      - MYSQL_DATABASE=nextcloud
-      - MYSQL_USER=nextcloudusr
-      - MYSQL_PASSWORD=${MYSQLPASSWORD}
-      - MYSQL_HOST=mariadb
 
   wireguard:
     image: ghcr.io/linuxserver/wireguard

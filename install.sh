@@ -53,11 +53,10 @@ fi
 # create some dirs for persistent storage for Docker containers
 echo "📂  Doing some filesystem stuff"
 mkdir -p /data/docker/portainer
-mkdir -p /data/docker/nextcloud
-mkdir -p $DIR/mariadb
-mkdir -p $DIR/nextcloud
+mkdir -p /data/docker/filebrowser
+mkdir -p $DIR/data
+mkdir -p $DIR/config
 
-usermod -a -G www-data $USER
 
 # add sftp user
 echo "🤓  Adding SFTP user"
@@ -77,13 +76,9 @@ echo "DATAROOT=$DIR" >> .env
 echo "🚀️  Starting the docker stack"
 docker-compose -p backupstack -f backupstack.yaml up -d
 
-# chown after init of NextCloud
-chown -R www-data:www-data $DIR/nextcloud
-
 echo "🧘  Done, everything should be running"
 
 IP="$(hostname -I | cut -d " " -f 1)"
 echo "🌍  Portainer runs on http://$IP:9000"
-echo "🌍  Nextcloud runs on http://$IP:8017"
-echo "🌍  Adminer runs on http://$IP:8092"
+echo "🌍  Filebrowser runs on http://$IP:8017"
 echo "🌍  Wireguard listens on port 51820"
