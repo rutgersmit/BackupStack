@@ -55,15 +55,12 @@ echo "📂  Doing some filesystem stuff"
 mkdir -p /data/docker/portainer
 mkdir -p /data/docker/filebrowser
 mkdir -p $DIR/data
-mkdir -p $DIR/config
-
 
 # add sftp user
 echo "🤓  Adding SFTP user"
 useradd sftpuser
 passwd sftpuser
-usermod -d $DIR/nextcloud/admin/files sftpuser
-usermod -a -G www-data sftpuser
+usermod -d $DIR/data sftpuser
 
 
 # echo variables into .env file which is read by docker compose
@@ -75,6 +72,8 @@ echo "DATAROOT=$DIR" >> .env
 # bring up the container stack
 echo "🚀️  Starting the docker stack"
 docker-compose -p backupstack -f backupstack.yaml up -d
+
+chown -R sftpuser $DIR/data
 
 echo "🧘  Done, everything should be running"
 
