@@ -75,7 +75,7 @@ docker-compose -p backupstack -f backupstack.yaml up -d
 
 chown -R sftpuser $DIR/data
 
-echo "🧘  Done, everything should be running"
+echo "🧘  Done, everything should be running"+
 
 IP="$(hostname -I | cut -d " " -f 1)"
 echo "🌍  Portainer runs on http://$IP:9000"

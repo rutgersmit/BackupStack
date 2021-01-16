@@ -2,8 +2,8 @@ version: '3.5'
 
 services:
   portainer:
-    image: portainer/portainer-ce
     container_name: portainer
+    image: portainer/portainer-ce
     command: -H unix:///var/run/docker.sock
     restart: always
     ports:
@@ -13,8 +13,8 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - /data/docker/portainer:/data
 
-
   filebrowser:
+    container_name: filebrowser
     image: hurlenko/filebrowser
     user: "0:0"
     volumes:
@@ -37,12 +37,12 @@ services:
     environment:
       - PUID=1000
       - PGID=1000
-      - TZ=Europe/London
-      - SERVERPORT=51820 #optional
-      - PEERS=1 #optional
-      - PEERDNS=auto #optional
-      - INTERNAL_SUBNET=10.13.13.0 #optional
-      - ALLOWEDIPS=0.0.0.0/0 #optional
+      - TZ=Europe/Amsterdam
+      - SERVERPORT=51820
+      - PEERS=1
+      - PEERDNS=auto
+      - INTERNAL_SUBNET=10.13.13.0
+      - ALLOWEDIPS=0.0.0.0/0
     volumes:
       - /data/docker/wireguard/config:/config
       - /lib/modules:/lib/modules
@@ -56,5 +56,4 @@ services:
 
 networks:
   backupnet:
-#    name: backupnet
     driver: bridge
